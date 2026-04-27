@@ -23,10 +23,13 @@ const handleOAuthLogin = (ID: string, URL: string) => {
   const githubOAuthParams : StrictGithubOAuthParams = {
     client_id : ID,
     redirect_uri : URL,
-    scope : "user",
+    scope : ["user", "repo"]
   };
 
-  const params = new URLSearchParams( githubOAuthParams );
+  const params = new URLSearchParams( {
+    ...githubOAuthParams,
+    scope : githubOAuthParams.scope.join(' '), // scope는 공백으로 구분된 문자열로 전달해야 함
+  } );
   window.location.href = `${baseURL}?${params.toString()}`;
 
 };
