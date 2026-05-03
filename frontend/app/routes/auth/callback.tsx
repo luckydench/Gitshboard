@@ -27,7 +27,8 @@ export default function Callback() {
                     headers : {
                         'Content-Type' : 'application/json'
                     },
-                    body : JSON.stringify({code})
+                    body : JSON.stringify({code}),
+                    credentials : 'include'
                 })
 
                 if(response.ok){
@@ -55,4 +56,9 @@ export default function Callback() {
 
     },[])
 
+    return(
+        <div className = "flex justify-center items-center h-screen">
+            <h1>로딩 중...</h1>
+        </div>
+    )
 }
