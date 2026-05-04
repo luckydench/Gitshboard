@@ -1,36 +1,19 @@
 import Router from 'express';
 import jwt from 'jsonwebtoken';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { AuthRequest } from '../types/middlewares/auth';
+import { authToken, authUser } from '../middlewares/auth.middleware';
 
 const prisma = new PrismaClient();
 const user_router = Router();
 
 
 // api/user
-user_router.get('/', async (req, res) => {
+user_router.get('/', authToken, authUser, async (req: AuthRequest, res) => {
 
-    const app_token = req.cookies.app_token;
-    console.log("Received token from cookies:", req.cookies);
+  const user = req.user!; //authUser 미들웨어에서 인증된 사용자 정보를 요청 객체에 추가했으므로 req.user는 항상 존재한다고 가정할 수 있음
 
-    if(!app_token){
-        res.status(401).json({ error : '인증 토큰이 없습니다.' });
-    }
-
-    try{
-        const decoded = jwt.verify(app_token, process.env.JWT_SECRET!);
-        const { userId, githubId } = decoded as { userId : number, githubId : number };
-
-        const user = await prisma.user.findUnique({
-            where : { 
-                id : userId
-            }
-        });
-
-        if(!user){
-            throw { status : 404, message : '사용자를 찾을 수 없습니다.' };
-        }
-      
-        
+  try{
         const accessToken = user.githubAccessToken;
 
         const github_response = await fetch('https://api.github.com/user', {
@@ -45,15 +28,12 @@ user_router.get('/', async (req, res) => {
             res.status(200).json({
                 user : github_user
             })
-
         }
         else{
             throw { status : github_response.status, message : 'GitHub API 요청 실패' };
         }
-
-
-
-    }catch(err : unknown){
+    }
+    catch(err : unknown){
         //에러가 "객체" 형식임을 알려줘야 in 구문을 통해 속성이 존재하는 지를 확인하는 narrowing 이 가능함
         //추가로 null은 typeof를 찍어보면 object로 나오는... 자스의 이상한 버그 때문에 체크 해줘야 함
         if(typeof err === 'object' && err !== null && 'status' in err && 'message' in err){
