@@ -7,6 +7,11 @@ import { authToken, authUser } from '../middlewares/auth.middleware';
 const prisma = new PrismaClient();
 const user_router = Router();
 
+// api/user/health
+user_router.get('/health', (req, res)=>{
+    res.json({ message: 'User route is working!' });
+})
+
 
 // api/user
 user_router.get('/', authToken, authUser, async (req: AuthRequest, res) => {
@@ -47,6 +52,45 @@ user_router.get('/', authToken, authUser, async (req: AuthRequest, res) => {
     }
 
 });
+
+
+// api/user/repos
+user_router.get('/repos', authToken, authUser, async(req : AuthRequest, res)=>{
+    const user = req.user!;
+    res.json({ user });
+
+    const username = user.githubUsername;
+    const accessToken  = user.githubAccessToken;
+
+    try{
+        const github_response = await fetch(`https://api.github.com/users/${username}/repos`, {
+            headers : {
+                'Authorization' : `token ${accessToken}`
+            }
+        });
+        if(github_response.ok){
+            const github_repos = await github_response.json();
+            res.status(200).json({ repos : github_repos });
+        }
+        else{
+            throw { status : github_response.status, message : 'GitHub API 요청 실패' };
+        }
+    }
+
+    catch(error){
+        //어떤 이유에 의한 에러인게 구체적으로 들어오면 항상 {status, message} 형태로 error가 옵니다.
+        if(typeof error === 'object' && error !== null && 'status' in error && 'message' in error){
+            const { status, message } = error as { status : number, message : string };
+            res.status(status).json({ error : message });
+            return;
+        }
+        else
+            res.status(500).json({ error : '서버 에러' });
+    }
+
+})
+
+
 
 user_router.use((req, res) => {
     res.status(404).json({ error: 'Not Found' });
