@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { useGithubResult } from "~/types/hooks/useGithub";
 
 
 /**
@@ -12,7 +13,7 @@ import { useEffect, useState } from "react";
  * 사용 예시 :
  */
 
-export default function useGithub<T>(api_url: string) : { githubDataState: T | null; isLoading: boolean, isError: boolean }{
+export default function useGithub<T>(api_url: string) : useGithubResult<T>{
     const [githubDataState, setGithubDataState] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
