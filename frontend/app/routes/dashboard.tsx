@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
-import { Loading } from "~/components/home/Loading";
-import useGithub from "~/hooks/useGithub";
+import { Loading } from "~/components/common/Loading";
+import RepositoryList from "~/components/RepositoryList";
 import useGithubUser from "~/hooks/useUser";
 import { Github } from "~/icons/Github";
-import type { GithubRepo, GithubUser } from "~/types/GithubInfo";
-import type { useGithubResult } from "~/types/hooks/useGithub";
+import type { GithubUser } from "~/types/GithubInfo";
 
 
 export default function Dashboard(){
     const { userDataState, isLoading, isError } = useGithubUser() as { userDataState: GithubUser; isLoading: boolean, isError: boolean };//userDataState는 null이 될 수 없도록 단언합니다. isLoading이 true인 동안은 이 컴포넌트가 렌더링되지 않기 때문에 안전합니다.
-    const repoData = useGithub<GithubRepo[]>("/api/users/repos") as useGithubResult<GithubRepo[]>;
 
     const navigate = useNavigate();
     
@@ -31,7 +29,7 @@ export default function Dashboard(){
         <div className="min-h-screen">
 
             {/* Header */}
-            <header className="sticky top-0 z-10 border-b border-gray-800 bg-gray-950/90 backdrop-blur-sm px-6 py-3">
+            <header className="sticky top-0 z-10 border-b border-gray-800 bg-github-light backdrop-blur-sm px-6 py-3">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="invert">
@@ -153,6 +151,8 @@ export default function Dashboard(){
                             <p className="text-3xl font-bold text-gray-600">—</p>
                         </div>
                     </div>
+                    {/* Repository List */}
+                    <RepositoryList/>
                 </main>
             </div>
         </div>
