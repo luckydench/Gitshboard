@@ -1,11 +1,6 @@
 import useGithub from "~/hooks/useGithub";
-import type { GithubRepo } from "~/types/GithubInfo";
+import type { GithubRepositoryResponse } from "~/types/GithubInfo";
 import type { useGithubResult } from "~/types/hooks/useGithub";
-
-
-interface GithubRepositoryResponse{
-    repos : GithubRepo[];
-}
 
 
 export default function RepositoryList(){
