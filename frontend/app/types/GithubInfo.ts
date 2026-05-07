@@ -67,3 +67,7 @@ export interface GithubRepo{
     watchers : number;
 
 }
+
+export interface GithubRepositoryResponse{
+    repos : GithubRepo[];
+}
