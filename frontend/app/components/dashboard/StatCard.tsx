@@ -1,14 +1,16 @@
-
 export interface StatCardProps{
-    anyState : number
+    label : string,
+    value : number,
+    caption : string
 }
 
 
-export default function StatCard( { anyState } : StatCardProps){
+export default function StatCard( { label, value, caption } : StatCardProps){
     return(
-    <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
-        <p className="text-gray-400 text-xs uppercase tracking-wider mb-1">Followers</p>
-        <p className="text-3xl font-bold text-white">{anyState}</p>
+    <div className="rounded-[1.75rem] bg-white p-6 shadow-[0_22px_60px_rgba(15,23,42,0.08)] transition-transform hover:-translate-y-1 dark:bg-gray-900">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gray-400">{label}</p>
+        <p className="mt-5 text-4xl font-semibold tracking-tight text-gray-950 dark:text-white">{value}</p>
+        <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">{caption}</p>
     </div>
     )
 }

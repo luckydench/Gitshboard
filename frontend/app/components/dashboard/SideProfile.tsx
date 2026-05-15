@@ -1,5 +1,4 @@
 
-
 export interface SideProfileComponentProps{
     userDataState : {
         avatar_url : string,
@@ -19,85 +18,82 @@ export interface SideProfileComponentProps{
 
 
 export default function SideProfile({ userDataState }: SideProfileComponentProps){
+    const profileDetails = [
+        { label: "Company", value: userDataState.company },
+        { label: "Location", value: userDataState.location },
+        { label: "Email", value: userDataState.email },
+    ].filter((item) => item.value);
+
     return(
-        <aside className="w-64 shrink-0 flex flex-col gap-5">
+        <aside className="flex min-h-135 flex-col rounded-4xl bg-gray-950 p-7 text-white shadow-[0_30px_80px_rgba(15,23,42,0.22)] lg:sticky lg:top-28">
+            <div className="flex flex-col gap-7">
+                <div className="flex items-center gap-5 lg:flex-col lg:items-start">
+                    <img
+                        src={userDataState.avatar_url}
+                        alt="avatar"
+                        className="h-24 w-24 rounded-3xl object-cover shadow-2xl shadow-black/30 lg:h-40 lg:w-40"
+                    />
 
-            {/* Avatar */}
-            <img
-                src={userDataState.avatar_url}
-                alt="avatar"
-                className="w-full rounded-full ring-2 ring-gray-700"
-            />
+                    <div>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-gray-400">
+                            Profile
+                        </p>
+                        <h1 className="text-3xl font-semibold leading-tight tracking-tight">
+                            {userDataState.name ?? userDataState.login}
+                        </h1>
+                        <p className="mt-2 text-base text-gray-400">@{userDataState.login}</p>
+                    </div>
+                </div>
 
-            {/* Name / Login */}
-            <div>
-                <h1 className="text-xl font-bold text-white leading-tight">
-                    {userDataState.name ?? userDataState.login}
-                </h1>
-                <p className="text-gray-400 text-base">{userDataState.login}</p>
+                {userDataState.bio && (
+                    <p className="max-w-sm text-sm leading-7 text-gray-300">{userDataState.bio}</p>
+                )}
+
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="rounded-3xl bg-white/8 p-4">
+                        <p className="text-2xl font-semibold">{userDataState.followers}</p>
+                        <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gray-400">Followers</p>
+                    </div>
+                    <div className="rounded-3xl bg-white/8 p-4">
+                        <p className="text-2xl font-semibold">{userDataState.following}</p>
+                        <p className="mt-1 text-xs uppercase tracking-[0.18em] text-gray-400">Following</p>
+                    </div>
+                </div>
             </div>
 
-            {/* Bio */}
-            {userDataState.bio && (
-                <p className="text-gray-300 text-sm leading-relaxed">{userDataState.bio}</p>
-            )}
+            <div className="mt-8 flex flex-col gap-5">
+                {(profileDetails.length > 0 || userDataState.blog) && (
+                    <div className="space-y-4 rounded-3xl bg-white/6 p-5">
+                        {profileDetails.map((item) => (
+                            <div key={item.label}>
+                                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">{item.label}</p>
+                                <p className="mt-1 truncate text-sm text-gray-200">{item.value}</p>
+                            </div>
+                        ))}
+                        {userDataState.blog && (
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Blog</p>
+                                <a
+                                    href={userDataState.blog}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mt-1 block truncate text-sm text-sky-300 transition-colors hover:text-sky-200"
+                                >
+                                    {userDataState.blog}
+                                </a>
+                            </div>
+                        )}
+                    </div>
+                )}
 
-            {/* GitHub Profile 버튼 */}
-            <a
-                href={userDataState.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full text-center bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white text-sm py-1.5 px-4 rounded-md transition-colors"
-            >
-                View GitHub Profile
-            </a>
-
-            {/* Followers / Following */}
-            <div className="flex items-center gap-3 text-sm text-gray-400">
-                <span>
-                    <span className="font-semibold text-white">{userDataState.followers}</span>
-                    {" "}followers
-                </span>
-                <span className="text-gray-600">·</span>
-                <span>
-                    <span className="font-semibold text-white">{userDataState.following}</span>
-                    {" "}following
-                </span>
-            </div>
-
-            {/* Detail Info */}
-            <div className="flex flex-col gap-2 text-sm text-gray-400 border-t border-gray-800 pt-4">
-                {userDataState.company && (
-                    <div className="flex items-center gap-2">
-                        <span>🏢</span>
-                        <span className="truncate">{userDataState.company}</span>
-                    </div>
-                )}
-                {userDataState.location && (
-                    <div className="flex items-center gap-2">
-                        <span>📍</span>
-                        <span>{userDataState.location}</span>
-                    </div>
-                )}
-                {userDataState.email && (
-                    <div className="flex items-center gap-2">
-                        <span>✉️</span>
-                        <span className="truncate">{userDataState.email}</span>
-                    </div>
-                )}
-                {userDataState.blog && (
-                    <div className="flex items-center gap-2">
-                        <span>🔗</span>
-                        <a
-                            href={userDataState.blog}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 hover:underline truncate"
-                        >
-                            {userDataState.blog}
-                        </a>
-                    </div>
-                )}
+                <a
+                    href={userDataState.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-white px-5 py-3 text-center text-sm font-semibold text-gray-950 shadow-xl shadow-black/20 transition-transform hover:-translate-y-0.5"
+                >
+                    View GitHub Profile
+                </a>
             </div>
         </aside>
 
