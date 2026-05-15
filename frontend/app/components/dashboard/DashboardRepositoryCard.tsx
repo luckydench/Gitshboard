@@ -12,7 +12,7 @@ export interface RepositoryCardComponentProps{
 }
 
 
-export default function RepositoryDashboardCard({ repo } : RepositoryCardComponentProps){
+export default function DashboardRepositoryCard({ repo } : RepositoryCardComponentProps){
     const language = repo.language || "Unknown";
 
     return(

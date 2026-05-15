@@ -1,10 +1,10 @@
 import type { GithubRepositoryResponse } from "~/types/GithubInfo";
-import RepositoryDashboardCard from "./dashboard/RepositoryDashboardCard";
+import RepositoryDashboardCard from "./dashboard/DashboardRepositoryCard";
 
 
 export default function RepositoryList({githubDataState, isLoading, isError: _isError} : {githubDataState : GithubRepositoryResponse, isLoading : boolean, isError : boolean}){
     if(isLoading){
-        return <section className="rounded-[2rem] bg-white/70 p-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] dark:bg-gray-900/70">
+        return <section className="rounded-4xl bg-white/70 p-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] dark:bg-gray-900/70">
             <div className="mb-6 flex items-end justify-between gap-4">
                 <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gray-400">Repositories</p>
@@ -34,7 +34,7 @@ export default function RepositoryList({githubDataState, isLoading, isError: _is
     }
 
     return (
-        <section className="rounded-[2rem] bg-white/70 p-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] dark:bg-gray-900/70">
+        <section className="rounded-4xl bg-white/70 p-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] dark:bg-gray-900/70">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gray-400">Repositories</p>
