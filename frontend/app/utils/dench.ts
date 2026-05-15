@@ -59,7 +59,7 @@ function authConfig(config: DenchConfig, token: string): DenchConfig {
     }
 }
 
-function credientialsConfig(config: DenchConfig): DenchConfig {
+function credentialsConfig(config: DenchConfig): DenchConfig {
     return {
         ...config,
         options : {
@@ -76,13 +76,20 @@ const toJson = async <T>(builder: DenchGetBuilder<T>) => {
 }
 
 
-const error = (params : any[])=>{
-
+const error = (config: DenchConfig, callback : (error : unknown) => void) => {
+    config.errorcallback = callback;
 }
 
 
 
-export function dench(baseURL:string) : DenchInterface{
+/**
+ * Dench 빌더 함수
+ * 
+ * @param baseURL baseURL 
+ * @param label 빌더 레이블
+ * @returns 
+ */
+export function dench(baseURL:string, label? :string) : DenchInterface{
 
 
 
@@ -117,9 +124,9 @@ export function dench(baseURL:string) : DenchInterface{
             toJson :  () => toJson(builder),
             toObject : toObject,
             toFormData : toFormData,
-            errorCacllback : error,
-            credientials : ()=>{
-                builder.config = credientialsConfig(builder.config);
+            error : (callback: (error: unknown) => void) => error(builder.config, callback),
+            credentials : ()=>{
+                builder.config = credentialsConfig(builder.config);
                 return { ...builder };
             },
             abort : (controller : AbortController) =>{
@@ -154,7 +161,7 @@ export function dench(baseURL:string) : DenchInterface{
         const builder: DenchGetBuilder<T> = {
             config: baseConfig,
             toResponse: () => runfetch<T>(builder.config),
-            errorCacllback: error,
+            error: (callback: (error: unknown) => void) => error(builder.config, callback),
             abort: (controller: AbortController) => {
                 builder.config = abortConfig(builder.config, controller);
                 return { ...builder };
@@ -182,8 +189,8 @@ export function dench(baseURL:string) : DenchInterface{
                     return res.formData();
                 })
             },
-            credientials: () => {
-                builder.config = credientialsConfig(builder.config);
+            credentials: () => {
+                builder.config = credentialsConfig(builder.config);
                 return { ...builder };
             }
         }

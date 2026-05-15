@@ -46,8 +46,12 @@ export default async function denchfetcher<T>(url: string, config?: DenchConfig)
 
     try{
         res = await fetch(`${url}`, config?.options)
+        if(!res.ok){
+            throw new Error(`API request failed with status ${res.status}: ${res.statusText}`);
+        }
     }
     catch(error){
+        if(config && config.errorcallback) config.errorcallback(error);
         throw error;
     }
     finally{
