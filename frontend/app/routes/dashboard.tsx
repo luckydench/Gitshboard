@@ -99,11 +99,11 @@ export default function Dashboard(){
 
             <Header userDataState={userDataState} />
 
-            <div className="mx-auto grid max-w-380 gap-8 px-6 py-10 lg:grid-cols-[360px_minmax(0,1fr)] lg:px-8">
+            <section className="mx-auto grid max-w-380 gap-8 px-6 py-10 lg:grid-cols-[360px_minmax(0,1fr)] lg:px-8">
                 <SideProfile userDataState={userDataState} />
 
                 <main className="flex min-w-0 flex-col gap-8">
-                    <section className="rounded-[2.25rem] bg-white p-8 shadow-[0_30px_90px_rgba(15,23,42,0.10)] dark:bg-gray-900">
+                    <aside className="rounded-[2.25rem] bg-white p-8 shadow-[0_30px_90px_rgba(15,23,42,0.10)] dark:bg-gray-900">
                         <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
                             <div className="max-w-2xl">
                                 <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gray-400">
@@ -121,17 +121,17 @@ export default function Dashboard(){
                                 <p className="mt-2 text-lg font-semibold text-gray-950 dark:text-white">@{userDataState.login}</p>
                             </div>
                         </div>
-                    </section>
+                    </aside>
 
-                    <div className="grid gap-5 md:grid-cols-3">
+                    <section className="grid gap-5 md:grid-cols-3">
                         <StatCard label="Followers" value={userDataState.followers} caption="People watching your updates" />
                         <StatCard label="Following" value={userDataState.following} caption="Accounts in your network" />
                         <StatCard label="Repos" value={reposDataState.repos.length} caption="Repositories available here" />
-                    </div>
+                    </section>
 
                     <RepositoryList githubDataState={reposDataState} isLoading={isLoading} isError={isError} />
                 </main>
-            </div>
+            </section>
 
         </div>
     );
