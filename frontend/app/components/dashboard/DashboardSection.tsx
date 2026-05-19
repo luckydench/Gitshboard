@@ -6,6 +6,7 @@ import useFetchAll from "~/hooks/useFetchAll"
 import { Loading } from "../common/Loading"
 import { useNavigate } from "react-router"
 import { useEffect } from "react"
+import useErrorCallback from "~/hooks/useErrorCallback"
 
 export interface DashboardSectionProps { 
     userDataState : GithubUser,
@@ -21,15 +22,10 @@ export default function DashboardSection({ userDataState, mode }: DashboardSecti
         credentials : 'include'
     }
     , 5 * 60 * 1000, "api/users/repos")
-
-
-
-    useEffect(()=>{
-        if(isError){
-            navigate("/");
-        }
-    }, [isError, navigate]);
-
+    
+    useErrorCallback(isError, ()=>{
+        navigate("/");
+    })
 
 
 
