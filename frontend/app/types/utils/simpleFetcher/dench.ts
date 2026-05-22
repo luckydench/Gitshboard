@@ -26,14 +26,17 @@ export interface DenchBuilder<T>{
 }
 
 export interface DenchCreateBuilder<T> extends DenchBuilder<T>{
-    abort: () => DenchCreateBuilder<T>,
+    abort: (controller: AbortController) => DenchCreateBuilder<T>,
     auth: (token:string) => DenchCreateBuilder<T>,
-    credentials: (credentials : HTTPCredentials) => DenchCreateBuilder<T>,
-    cors: () => DenchCreateBuilder<T>,
+    credentials: () => DenchCreateBuilder<T>,
+    cors?: () => DenchCreateBuilder<T>,
     timeout: (ms : number) => DenchCreateBuilder<T>,
     toFormData: () => Promise<FormData>,
     toJson: () => Promise<T>,
-    toObject: () => Promise<T>
+    toObject: () => Promise<T>,
+    sendJson : (data : any) => DenchCreateBuilder<T>,
+    sendForm : (data : FormData) => DenchCreateBuilder<T>,
+    sendBlob : (data : Blob) => DenchCreateBuilder<T>,
 }
 
 

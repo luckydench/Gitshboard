@@ -1,5 +1,5 @@
 import { HTTPCredentials } from "~/types/utils/simpleFetcher/simpleFetcher"
-import type { DenchConfig, DenchGetBuilder, DenchInterface } from "~/types/utils/simpleFetcher/dench";
+import type { DenchConfig, DenchCreateBuilder, DenchGetBuilder, DenchInterface } from "~/types/utils/simpleFetcher/dench";
 import denchfetcher from "./denchfetcher";
 
 
@@ -192,6 +192,100 @@ export function dench(baseURL:string, label? :string) : DenchInterface{
             credentials: () => {
                 builder.config = credentialsConfig(builder.config);
                 return { ...builder };
+            }
+        }
+
+        return builder;
+    }
+
+    const post = <T>(api:string) : DenchCreateBuilder<T>=>{
+
+        const baseConfig : DenchConfig = {
+            baseURL,
+            api,
+            options : {
+                method : 'POST',
+            }
+        }
+
+
+        const builder : DenchCreateBuilder<T> = {
+            config : baseConfig,
+            credentials() {
+                builder.config = credentialsConfig(builder.config);
+                return { ...builder };
+            },
+            abort(controller : AbortController) {
+                builder.config = abortConfig(builder.config, controller);
+                return { ...builder };
+            },
+            auth(token: string) {
+                builder.config = authConfig(builder.config, token);
+                return { ...builder };
+            },
+            timeout(ms: number) {
+                builder.config = timeoutConfig(builder.config, ms);
+                return { ...builder };
+            },
+            error(callback) {
+                error(builder.config, callback);
+                return { ...builder };
+            },
+            toResponse() {
+                return runfetch<T>(builder.config);
+            },
+            toJson() {
+                return toJson(builder);
+            },
+            toObject() {
+                return runfetch<T>(builder.config).then((res) => {
+                    return res as unknown as T;
+                });
+            },
+            toFormData() {
+                return runfetch<T>(builder.config).then((res) => {
+                    return res.formData();
+                }); 
+            },
+            sendJson(data : any){
+                return {
+                    ...builder,
+                    config : {
+                        ...builder.config,
+                        options : {
+                            ...builder.config.options,
+                            headers : {
+                                ...builder.config.options.headers,
+                                'Content-Type' : 'application/json'
+                            },
+                            body : JSON.stringify(data)
+                        }
+                    }
+                }
+            },
+            sendForm(data : FormData){
+                return {
+                    ...builder,
+                    config : {
+                        ...builder.config,
+                        options : {
+                            ...builder.config.options,
+                            body : data
+                        }
+                    }
+                }
+            },
+            sendBlob(data : Blob){
+                return {
+                    ...builder,
+                    config : {
+                        ...builder.config,
+                        options : {
+                            ...builder.config.options,
+                            body : data
+                        }
+                    }
+                }
             }
         }
 
