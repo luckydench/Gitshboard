@@ -35,6 +35,10 @@ export default async function denchfetcher<T>(url: string, config?: DenchConfig)
     let res : Response;
     let timeout : NodeJS.Timeout | undefined;
 
+    console.log("Denchfetcher called with URL:", url, "and config:", config);
+
+    
+
     if(config?.timeout && config.abortController){
         timeout  = setTimeout(()=>{
             config.abortController?.abort();  

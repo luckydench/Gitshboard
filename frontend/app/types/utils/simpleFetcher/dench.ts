@@ -9,6 +9,7 @@ export interface DenchBaseConfig{
         credentials? : HTTPCredentials,
         signal? : AbortSignal,
         headers? : Record<string, string>
+        body?: string | FormData | Blob 
     },
 }
 
@@ -20,23 +21,22 @@ export interface DenchConfig extends DenchBaseConfig{
 
 export interface DenchBuilder<T>{
     config : DenchBaseConfig,
-    error: (callback: (error: unknown) => void) => void,
     toResponse: () => Promise<Response>
-
 }
 
 export interface DenchCreateBuilder<T> extends DenchBuilder<T>{
     abort: (controller: AbortController) => DenchCreateBuilder<T>,
     auth: (token:string) => DenchCreateBuilder<T>,
-    credentials: () => DenchCreateBuilder<T>,
+    credentials: (credentials: HTTPCredentials) => DenchCreateBuilder<T>,
     cors?: () => DenchCreateBuilder<T>,
     timeout: (ms : number) => DenchCreateBuilder<T>,
+    error: (callback: (error: unknown) => void) => DenchCreateBuilder<T>,
     toFormData: () => Promise<FormData>,
     toJson: () => Promise<T>,
     toObject: () => Promise<T>,
-    sendJson : (data : any) => DenchCreateBuilder<T>,
-    sendForm : (data : FormData) => DenchCreateBuilder<T>,
-    sendBlob : (data : Blob) => DenchCreateBuilder<T>,
+    sendJson : () => DenchCreateBuilder<T>,
+    sendForm : () => DenchCreateBuilder<T>,
+    sendBlob : () => DenchCreateBuilder<T>,
 }
 
 
@@ -51,7 +51,7 @@ export interface DenchGetBuilder<T> extends DenchBuilder<T>{
     auth: (token:string) => DenchGetBuilder<T>,
     timeout : (ms : number) => DenchGetBuilder<T>,
     credentials: (credentials : HTTPCredentials) => DenchGetBuilder<T>,
-
+    error: (callback: (error: unknown) => void) => DenchGetBuilder<T>,
     toFormData: () => Promise<FormData>,
     toJson: () => Promise<T>,
     toObject: () => Promise<T>
@@ -70,7 +70,7 @@ export interface DenchGetBuilder<T> extends DenchBuilder<T>{
 export interface DenchInterface{
     baseURL : string,
     get : <T>(api:string) => DenchGetBuilder<T>
-    post? : <T>(api: string, data : any) => DenchCreateBuilder<T>
+    post : <T>(api: string, data : any) => DenchCreateBuilder<T>
     put? : <T>(api: string, data : any) => DenchCreateBuilder<T>
     delete? : <T>(api: string) => DenchGetBuilder<T>
 }
