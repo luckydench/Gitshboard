@@ -5,6 +5,7 @@ export default [
     index("routes/home.tsx"),
     // route("라우팅경로명", "라우팅할 실제 컴포넌트 파일 경로명"),
     route("dashboard", "routes/dashboard.tsx"),
+    route("testpage", "routes/testpage.tsx"),
     route("auth/github/callback", "routes/auth/callback.tsx"),
 
 ] satisfies RouteConfig;
