@@ -1,5 +1,5 @@
 import { HTTPCredentials } from "~/types/utils/simpleFetcher/simpleFetcher"
-import type { DenchConfig, DenchCreateBuilder, DenchGetBuilder, DenchInterface } from "~/types/utils/simpleFetcher/dench";
+import type { DenchConfig, DenchCreateBuilder, DenchGetBuilder, DenchInterface, DenchRunner } from "~/types/utils/simpleFetcher/dench";
 import denchfetcher from "./denchfetcher";
 
 
@@ -44,6 +44,15 @@ function abortConfig(config : DenchConfig, controller : AbortController) : Dench
     }
 }
 
+
+/**
+ * 
+ * 인증 토큰을 Authorization 헤더에 설정하는 함수
+ * 
+ * @param config 
+ * @param token 
+ * @returns 
+ */
 function authConfig(config: DenchConfig, token: string): DenchConfig {
     const header = {
         ...config.options.headers,
@@ -59,7 +68,15 @@ function authConfig(config: DenchConfig, token: string): DenchConfig {
     }
 }
 
+/**
+ * 쿠키 기반 인증을 위한 credentials 설정 함수
+ * 
+ * @param config 
+ * @param credentials 
+ * @returns 
+ */
 function credentialsConfig(config: DenchConfig, credentials: HTTPCredentials): DenchConfig {
+    
     return {
         ...config,
         options : {
@@ -72,10 +89,75 @@ function credentialsConfig(config: DenchConfig, credentials: HTTPCredentials): D
     }
 }
 
-const toJson = async <T>(builder: DenchGetBuilder<T>) => {
-    return runfetch<T>(builder.config).then((res) => {
+
+function sendJsonConfig(config : DenchConfig) :DenchConfig{
+    return{
+        ...config,
+        options : {
+            ...config.options,
+            headers :{
+                ...config.options.headers,
+                'Content-Type' : 'application/json'
+             },
+             body : JSON.stringify(config.options.body)
+            }
+        }
+}
+
+function sendFormConfig(config : DenchConfig) : DenchConfig {
+
+    if(!(config.options.body instanceof FormData)){
+        throw new Error("Body must be an instance of FormData when using sendForm");
+    }
+
+    return {
+        ...config,
+        options : {
+            ...config.options,
+            headers : {
+                ...config.options.headers,
+            },
+            body : config.options.body
+        }
+    }
+}
+
+
+function sendBlobConfig(config : DenchConfig) : DenchConfig {
+    return{
+        ...config,
+        options : {
+            ...config.options,
+            headers : {
+                ...config.options.headers,
+                'Content-Type' : 'application/octet-stream'
+             },
+            body : config.options.body
+        }
+    }
+}
+
+
+
+
+const toJson = async <T>(config : DenchConfig)  => {
+    return runfetch<T>(config).then((res) => {
         return res.json() as T;
     })
+}
+
+const toObject = async <T>(config: DenchConfig) => {
+    return runfetch<T>(config).then((res) => {
+        return res as unknown as T;
+    })
+}
+
+
+const toFormData = async <T>(config: DenchConfig) => {
+    return runfetch<T>(config).then((res) => {
+        return res.formData();
+    }
+)
 }
 
 
@@ -83,6 +165,16 @@ const error = (config: DenchConfig, callback : (error : unknown) => void) => {
     config.errorcallback = callback;
 }
 
+
+
+export function denchRunner<T>(config : DenchConfig) : DenchRunner<T>{
+    return {
+        toResponse : () => runfetch<T>(config),
+        toJson : () => toJson<T>(config),
+        toObject : () => toObject<T>(config),
+        toFormData : () => toFormData<T>(config)
+     }
+}
 
 
 /**
@@ -94,10 +186,8 @@ const error = (config: DenchConfig, callback : (error : unknown) => void) => {
  */
 export function dench(baseURL:string, label? :string) : DenchInterface{
 
-
-
     const get = <T>(api :string) : DenchGetBuilder<T> => {
-        
+
         const baseConfig : DenchConfig = {
             baseURL,
             api,
@@ -106,25 +196,12 @@ export function dench(baseURL:string, label? :string) : DenchInterface{
             }
         }
 
-        const toObject = ()=>{
-            return runfetch<T>(builder.config).then((res)=>{
-                return res as unknown as T;
-            })
-        }
-
-        const toFormData = ()=>{
-            return runfetch<T>(builder.config).then((res)=>{
-                return res.formData();
-            })
-        }
-
-
         const builder : DenchGetBuilder<T> = {
             config : baseConfig,
             toResponse : () => runfetch<T>(builder.config),
-            toJson :  () => toJson(builder),
-            toObject : toObject,
-            toFormData : toFormData,
+            toJson :  () => toJson(builder.config),
+            toObject : () => toObject(builder.config),
+            toFormData : () => toFormData(builder.config),
             error : (callback: (error: unknown) => void) => {
                 error(builder.config, callback);
                  return { ...builder };
@@ -165,114 +242,39 @@ export function dench(baseURL:string, label? :string) : DenchInterface{
             }
         }
 
-        const builder : DenchCreateBuilder<T> = {
-            config : baseConfig,
-            credentials(credentials: HTTPCredentials) {
-                
-                console.log("crediential builder", this);
-
-                const newBuilder : DenchCreateBuilder<T> = {
-                    ...this,
-                    config : credentialsConfig(this.config, credentials)
+        const createBuilder = <T>(config : DenchConfig) : DenchCreateBuilder<T> => ({
+            config : config,
+            toResponse : () => runfetch<T>(config),
+            toJson :  () => toJson(config),
+            toObject : ()=> toObject(config),
+            toFormData : ()=>toFormData(config),
+            sendJson: () =>  createBuilder<T>(sendJsonConfig(config)),
+            sendForm: () => createBuilder<T>(sendFormConfig(config)),
+            sendBlob: () => createBuilder<T>(sendBlobConfig(config)),
+            error : (callback: (error: unknown) => void) => {
+                error(config, callback);
+                return createBuilder<T>(config);
+            },
+            credentials : (credentials: HTTPCredentials)=>{
+                const newConfig = credentialsConfig(config, credentials);
+                return createBuilder<T>(newConfig);
+            },
+            abort : (controller : AbortController) =>{
+                const newConfig = abortConfig(config, controller);
+                return createBuilder<T>(newConfig);
+            },
+            auth : (token:string)=>{
+                const newConfig = authConfig(config, token);
+                return createBuilder<T>(newConfig);
+            },
+            timeout : (ms : number) => {
+                const newConfig = timeoutConfig(config, ms);
+                return createBuilder<T>(newConfig); 
                 }
+            })
 
-                console.log("new builder after credentials:", newBuilder);
-                return newBuilder;
-            },
-            abort(controller : AbortController) {
-
-                const newBuilder : DenchCreateBuilder<T> = {
-                    ...this,
-                    config : abortConfig(this.config, controller)
-                }
-                return newBuilder;
-            },
-            auth(token: string) {
-                const newBuilder : DenchCreateBuilder<T> = {
-                    ...this,
-                    config : authConfig(this.config, token)
-                }
-                return newBuilder;
-            },
-            timeout(ms: number) {
-                const newBuilder : DenchCreateBuilder<T> = {
-                    ...this,
-                    config : timeoutConfig(this.config, ms)
-                }
-                return newBuilder;
-            },
-            error(callback) {
-                error(this.config, callback);
-                return { ...this };
-            },
-            toResponse() {
-                return runfetch<T>(this.config);
-            },
-            toJson() {
-                return toJson(this);
-            },
-            toObject() {
-                return runfetch<T>(this.config).then((res) => {
-                    return res as unknown as T;
-                });
-            },
-            toFormData() {
-                return runfetch<T>(this.config).then((res) => {
-                    return res.formData();
-                }); 
-            },
-            sendJson(){
-                //console.log("sendJson called with data:", data);
-
-                const newBuilder : DenchCreateBuilder<T> = {
-                    ...this,
-                    config: {
-                        ...this.config,
-                        options: {
-                            ...this.config.options,
-                            headers: {
-                                ...this.config.options.headers,
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        }
-                    }
-                }
-
-                console.log("New builder config after sendJson:", newBuilder);
-
-                return newBuilder;
-                    
-            },
-            sendForm(){
-                return {
-                    ...this,
-                    config : {
-                        ...this.config,
-                        options : {
-                            ...this.config.options,
-                            body : data
-                        }
-                    }
-                }
-            },
-            sendBlob(){
-                return {
-                    ...this,
-                    config : {
-                        ...this.config,
-                        options : {
-                            ...this.config.options,
-                            body : data
-                        }
-                    }
-                }
-            }
-        }
-
-        return builder;
+        return createBuilder<T>(baseConfig);
     }
-
 
     return {
         baseURL,
@@ -280,5 +282,3 @@ export function dench(baseURL:string, label? :string) : DenchInterface{
         post : post
     }
 }
-
-

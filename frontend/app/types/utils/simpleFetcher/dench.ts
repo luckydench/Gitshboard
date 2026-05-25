@@ -8,8 +8,8 @@ export interface DenchBaseConfig{
         method : string,
         credentials? : HTTPCredentials,
         signal? : AbortSignal,
-        headers? : Record<string, string>
-        body?: string | FormData | Blob 
+        headers? : Record<string, string>,
+        body?: BodyInit
     },
 }
 
@@ -21,24 +21,26 @@ export interface DenchConfig extends DenchBaseConfig{
 
 export interface DenchBuilder<T>{
     config : DenchBaseConfig,
-    toResponse: () => Promise<Response>
 }
 
-export interface DenchCreateBuilder<T> extends DenchBuilder<T>{
+export interface DenchCreateBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
     abort: (controller: AbortController) => DenchCreateBuilder<T>,
     auth: (token:string) => DenchCreateBuilder<T>,
     credentials: (credentials: HTTPCredentials) => DenchCreateBuilder<T>,
     cors?: () => DenchCreateBuilder<T>,
     timeout: (ms : number) => DenchCreateBuilder<T>,
     error: (callback: (error: unknown) => void) => DenchCreateBuilder<T>,
-    toFormData: () => Promise<FormData>,
-    toJson: () => Promise<T>,
-    toObject: () => Promise<T>,
     sendJson : () => DenchCreateBuilder<T>,
     sendForm : () => DenchCreateBuilder<T>,
     sendBlob : () => DenchCreateBuilder<T>,
 }
 
+export interface DenchRunner<T>{
+    toResponse: () => Promise<Response>,
+    toJson: () => Promise<T>,
+    toObject: () => Promise<T>,
+    toFormData: () => Promise<FormData>
+}
 
 /**
  * GET 요청 빌더 인터페이스
@@ -46,15 +48,12 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T>{
  * @interface DenchGetBuilder
  */
 
-export interface DenchGetBuilder<T> extends DenchBuilder<T>{
+export interface DenchGetBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
     abort: (controller : AbortController) => DenchGetBuilder<T>,
     auth: (token:string) => DenchGetBuilder<T>,
     timeout : (ms : number) => DenchGetBuilder<T>,
     credentials: (credentials : HTTPCredentials) => DenchGetBuilder<T>,
-    error: (callback: (error: unknown) => void) => DenchGetBuilder<T>,
-    toFormData: () => Promise<FormData>,
-    toJson: () => Promise<T>,
-    toObject: () => Promise<T>
+    error: (callback: (error: unknown) => void) => DenchGetBuilder<T>
 }
 
 
