@@ -6,7 +6,7 @@ import {
     timeoutConfig, sendJsonConfig, 
     sendFormConfig, sendBlobConfig, 
     modeConfig, 
-    errorConfig } from "./denchuitl";
+    errorConfig } from "./denchConfigModule"
 import { runfetch, toFormData, toJson, toObject } from "./denchRunnter";
 
 
