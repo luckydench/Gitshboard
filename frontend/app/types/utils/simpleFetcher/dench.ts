@@ -1,4 +1,5 @@
-import type { HTTPCredentials } from "./simpleFetcher"
+import type { HTTPCredentials, HTTPMode } from "./denchEnum";
+
 
 export interface DenchBaseConfig{
     baseURL : string,
@@ -10,6 +11,7 @@ export interface DenchBaseConfig{
         signal? : AbortSignal,
         headers? : Record<string, string>,
         body?: BodyInit
+        mode? : HTTPMode
     },
 }
 
@@ -17,7 +19,6 @@ export interface DenchConfig extends DenchBaseConfig{
     abortController?: AbortController,   
     timeout? : number;
 }
-
 
 export interface DenchBuilder<T>{
     config : DenchBaseConfig,
@@ -27,8 +28,8 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
     abort: (controller: AbortController) => DenchCreateBuilder<T>,
     auth: (token:string) => DenchCreateBuilder<T>,
     credentials: (credentials: HTTPCredentials) => DenchCreateBuilder<T>,
-    cors?: () => DenchCreateBuilder<T>,
     timeout: (ms : number) => DenchCreateBuilder<T>,
+    mode : (mode : HTTPMode) => DenchCreateBuilder<T>,
     error: (callback: (error: unknown) => void) => DenchCreateBuilder<T>,
     sendJson : () => DenchCreateBuilder<T>,
     sendForm : () => DenchCreateBuilder<T>,

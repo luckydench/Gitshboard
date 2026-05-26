@@ -62,3 +62,8 @@ export enum HTTPRedirect {
     MANUAL = "manual"
 }
 
+export enum HTTPMode{
+    CORS = "cors",
+    NO_CORS = "no-cors",
+    SAME_ORIGIN = "same-origin",
+}

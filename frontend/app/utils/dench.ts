@@ -1,5 +1,5 @@
-import type { DenchConfig, DenchCreateBuilder, DenchGetBuilder, DenchInterface, DenchRunner, HTTPMode } from "~/types/utils/simpleFetcher/dench";
-import type { HTTPCredentials } from "~/types/utils/simpleFetcher/denchEnum";
+import type { DenchConfig, DenchCreateBuilder, DenchGetBuilder, DenchInterface, DenchRunner } from "~/types/utils/simpleFetcher/dench";
+import type { HTTPCredentials, HTTPMode } from "~/types/utils/simpleFetcher/denchEnum";
 
 import { 
     runfetch, toFormData, toObject, toJson, 
@@ -29,9 +29,6 @@ export function denchRunner<T>(config : DenchConfig) : DenchRunner<T>{
  * @returns 
  */
 export function dench(baseURL:string, label? :string) : DenchInterface{
-
-
-
 
     const get = <T>(api :string) : DenchGetBuilder<T> => {
 
