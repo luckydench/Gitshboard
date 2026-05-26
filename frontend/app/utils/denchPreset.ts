@@ -94,32 +94,95 @@ export const createDenchPresets = (type : string, baseURL : string, optionParmas
             ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, data })
         },
         postJson : {
-            ...createConfig({ method: "POST", acceptType: "application/json", data })
+            ...createConfig({ method: "POST", contentType: "application/json", data })
         },
         postAuthJson : {
-            ...createConfig({ method: "POST", auth: token, acceptType: "application/json", data })
+            ...createConfig({ method: "POST", auth: token, contentType: "application/json", data })
         },
         postCookiesJson : {
-            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, acceptType: "application/json", data })
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, contentType: "application/json", data })
         },
         postFormData : {
-            ...createConfig({ method: "POST", acceptType: "multipart/form-data", data })
+            ...createConfig({ method: "POST", contentType: "multipart/form-data", data })
         },
         postAuthFormData : {
-            ...createConfig({ method: "POST", auth: token, acceptType: "multipart/form-data", data })
+            ...createConfig({ method: "POST", auth: token, contentType: "multipart/form-data", data })
         },
         postCookiesFormData : {
-            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, acceptType: "multipart/form-data", data })
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, contentType: "multipart/form-data", data })
         },
         postBlob : {
-            ...createConfig({ method: "POST", acceptType: "application/octet-stream", data })
+            ...createConfig({ method: "POST", contentType: "application/octet-stream", data })
         },
         postAuthBlob : {
-            ...createConfig({ method: "POST", auth: token, acceptType: "application/octet-stream", data })
+            ...createConfig({ method: "POST", auth: token, contentType: "application/octet-stream", data })
         },
         postCookiesBlob : {
-            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, acceptType: "application/octet-stream", data })
-        }
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, contentType: "application/octet-stream", data })
+        },
+        postDataToJson : {
+            ...createConfig({ method: "POST", data, acceptType: "application/json", contentType: "application/json" })
+        },
+        postAuthDataToJson : {
+            ...createConfig({ method: "POST", auth: token, data, acceptType: "application/json", contentType: "application/json" })
+        },
+        postCookiesDataToJson : {
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, data, acceptType: "application/json", contentType: "application/json" })
+        },
+        postJsonToJson : {
+            ...createConfig({ method: "POST", acceptType: "application/json", contentType: "application/json", data })
+        },
+        postAuthJsonToJson : {
+            ...createConfig({ method: "POST", auth: token, acceptType: "application/json", contentType: "application/json", data })
+        },
+        postCookiesJsonToJson : {
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, acceptType: "application/json", contentType: "application/json", data })
+        },
+        postFormDataToJson : {
+            ...createConfig({ method: "POST", acceptType: "application/json", contentType: "multipart/form-data", data })
+        },
+        postAuthFormDataToJson : {
+            ...createConfig({ method: "POST", auth: token, acceptType: "application/json", contentType: "multipart/form-data", data })
+        },
+        postCookiesFormDataToJson : {
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, acceptType: "application/json", contentType: "multipart/form-data", data })
+        },
+        postBlobToJson : {
+            ...createConfig({ method: "POST", acceptType: "application/json", contentType: "application/octet-stream", data })
+        },
+        postAuthBlobToJson : {
+            ...createConfig({ method: "POST", auth: token, acceptType: "application/json", contentType: "application/octet-stream", data })
+        },
+        postCookiesBlobToJson : {
+            ...createConfig({ method: "POST", credentials: HTTPCredentials.INCLUDE, acceptType: "application/json", contentType: "application/octet-stream", data })
+        },
+        deleteJson : {
+            ...createConfig({ method: "DELETE", acceptType: "application/json" })
+        },
+        deleteAuthJson : {
+            ...createConfig({ method: "DELETE", auth: token, acceptType: "application/json" })
+        },
+        deleteCookiesJson : {
+            ...createConfig({ method: "DELETE", credentials: HTTPCredentials.INCLUDE, acceptType: "application/json" })
+        },
+        deleteFormData : {
+            ...createConfig({ method: "DELETE", acceptType: "multipart/form-data" })
+        },
+        deleteAuthFormData : {
+            ...createConfig({ method: "DELETE", auth: token, acceptType: "multipart/form-data" })
+        },
+        deleteCookiesFormData : {
+            ...createConfig({ method: "DELETE", credentials: HTTPCredentials.INCLUDE, acceptType: "multipart/form-data" })
+        },
+        deleteBlob : {
+            ...createConfig({ method: "DELETE", acceptType: "application/octet-stream" })
+         },
+        deleteAuthBlob : {
+            ...createConfig({ method: "DELETE", auth: token, acceptType: "application/octet-stream" })
+        },
+        deleteCookiesBlob : {
+            ...createConfig({ method: "DELETE", credentials: HTTPCredentials.INCLUDE, acceptType: "application/octet-stream" })
+        },
     }
 
     const preset = presets[type];
