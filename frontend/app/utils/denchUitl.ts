@@ -2,10 +2,6 @@ import type { DenchConfig } from "~/types/utils/simpleFetcher/dench";
 import type { HTTPCredentials, HTTPMode } from "~/types/utils/simpleFetcher/denchEnum";
 import denchfetcher from "./denchfetcher";
 
-export function runfetch<T>(config : DenchConfig) : Promise<Response>{
-    return denchfetcher<T>(`${config.baseURL}${config.api}`, config);
-}
-
 /**
  * timeout 설정 
  * 
@@ -145,27 +141,6 @@ export function modeConfig(config : DenchConfig, mode : HTTPMode) : DenchConfig 
 }
 
 
-export const toJson = async <T>(config : DenchConfig)  => {
-    return runfetch<T>(config).then((res) => {
-        return res.json() as T;
-    })
-}
-
-export const toObject = async <T>(config: DenchConfig) => {
-    return runfetch<T>(config).then((res) => {
-        return res as unknown as T;
-    })
-}
-
-
-export const toFormData = async <T>(config: DenchConfig) => {
-    return runfetch<T>(config).then((res) => {
-        return res.formData();
-    }
-)
-}
-
-
-export const error = (config: DenchConfig, callback : (error : unknown) => void) => {
+export const errorConfig = (config: DenchConfig, callback : (error : unknown) => void) => {
     config.errorcallback = callback;
 }
