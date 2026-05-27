@@ -58,6 +58,9 @@ const createPostBuilder = <T>(config: DenchConfig): DenchCreateBuilder<T> => ({
 
 
 
+export const DenchInstancePreset : Partial<Record<string, DenchInterface>> = {}
+
+
 
 /**
  * Dench 빌더 함수
@@ -67,6 +70,8 @@ const createPostBuilder = <T>(config: DenchConfig): DenchCreateBuilder<T> => ({
  * @returns 
  */
 export function dench(baseURL:string, label? :string) : DenchInterface{
+
+    if(label) DenchInstancePreset[label] = DenchInstancePreset[label] || dench(baseURL);
 
     const get = <T>(api :string) : DenchGetBuilder<T> => {
 
