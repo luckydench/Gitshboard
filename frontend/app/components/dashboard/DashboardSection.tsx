@@ -5,26 +5,24 @@ import StatCard from "./StatCard"
 import useFetchAll from "~/hooks/useFetchAll"
 import { Loading } from "../common/Loading"
 import { useNavigate } from "react-router"
-import { useEffect } from "react"
 import useErrorCallback from "~/hooks/useErrorCallback"
 
 export interface DashboardSectionProps { 
     userDataState : GithubUser,
-    mode : number
+    loading : boolean
 }
         
 
-export default function DashboardSection({ userDataState, mode }: DashboardSectionProps){
+export default function DashboardSection({ userDataState, loading }: DashboardSectionProps){
 
     const navigate = useNavigate();
-
+    
     const { dataState, isLoading, isError} = useFetchAll<[GithubRepositoryResponse]>({
         method :'GET',
         credentials : 'include'
     }
     , 5 * 60 * 1000, "api/users/repos")
     
-    console.log("rendering DashboardSection with mode:", mode);
 
     useErrorCallback(isError, ()=>{
         navigate("/");
@@ -37,7 +35,6 @@ export default function DashboardSection({ userDataState, mode }: DashboardSecti
         );
     }
 
-    
     const reposDataState = dataState![0];
 
     
