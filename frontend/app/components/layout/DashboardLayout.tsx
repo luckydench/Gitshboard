@@ -2,27 +2,30 @@ import { Outlet } from "react-router";
 import { NavFloatButton } from "../common/NavFloatButton";
 import useRenderingTimer from "~/hooks/dev/useRenderingTimer";
 import { useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 
 export type FloatState = "1" | "2" | "3";
 
 export default function DashboardLayout(){
-    const render_time = useRenderingTimer("DashboardLayout");
+    const [resetTrigger, setResetTrigger] = useState(false);
+    const render_time = useRenderingTimer("DashboardLayout", resetTrigger, setResetTrigger);
     const [floatState, setFloatState] = useState<FloatState>("1");
-    console.log("Current Fetch Mode in DashboardLayout:", render_time);
+    const queryClient = new QueryClient();
 
     return(
-        <>
-            <Outlet context={[floatState, setFloatState]}/>
+        <QueryClientProvider client ={queryClient}>
+            <Outlet context={floatState}/>
             <NavFloatButton 
                 onFetchClick={(e)=>{ 
                     const value : FloatState= e.currentTarget.value as FloatState;
                     console.log("Fetch Button Clicked with value:", value);
                     setFloatState(value);
+                    setResetTrigger(true); // Toggle resetTrigger to reset the timer
                 }}
                 render_time={render_time}
                 />
-        </>
+        </QueryClientProvider>
     )
 }
