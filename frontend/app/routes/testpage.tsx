@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useOutletContext } from "react-router";
 import type { FloatState } from "~/components/layout/DashboardLayout";
 import DenchComponent from "~/components/testpage/DenchComponent";
+import GraphQLComponent from "~/components/testpage/GraphQLComponent";
 import TanstackComponent from "~/components/testpage/TanstackComponent";
 
 export interface TestResponse{
@@ -27,7 +28,7 @@ export default function TestPage(){
             <h1>Test Page</h1>
             {floatMode == "1" && <DenchComponent/>}
             {floatMode == "2" && <TanstackComponent/>}
-
+            {floatMode == "3" && <GraphQLComponent/>}
         </>
     )
 }
