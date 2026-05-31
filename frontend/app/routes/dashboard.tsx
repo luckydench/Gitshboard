@@ -1,17 +1,9 @@
-import {  useEffect, useState } from "react"
 import { useNavigate } from "react-router";
 import { Loading } from "~/components/common/Loading";
-import type { GithubRepositoryResponse, GithubUserResponse } from "~/types/GithubInfo";
-import useRenderingTimer from "~/hooks/dev/useRenderingTimer";
 import Header from "~/components/common/Header";
 import DashboardSection from "~/components/dashboard/DashboardSection";
 import useGithubUser from "~/hooks/useUser";
 import useErrorCallback from "~/hooks/useErrorCallback";
-import useFetchErrorCallback from "~/hooks/useFetchErrorCallback";
-import SpinFloatEffect from "~/components/common/SpinFloatEffect";
-import { NavFloatButton } from "~/components/common/NavFloatButton";
-import useRegistLoading from "~/hooks/dev/useRegistLoading";
-
 
 
 
@@ -38,7 +30,7 @@ export default function Dashboard(){
     return (
         <div className="min-h-screen bg-[#f4f6f1] text-gray-950 dark:bg-gray-950">
 
-            <Header userDataState={userDataState!} />
+            <Header/>
             <DashboardSection userDataState={userDataState!} loading={isLoading} />
 
 
