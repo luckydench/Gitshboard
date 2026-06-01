@@ -16,7 +16,7 @@ interface CommonResponse<T>{
 
 export default function Header(){
 
-    const denchInstance = useRef(dench("http://localhost:3000/api/", "headerDench"));
+    const denchInstance = useRef(dench("http://localhost:3000/api//", "headerDench"));
 
     const { data, error, isLoading} = useQuery<UserDataState, Error>(
         {
@@ -27,6 +27,7 @@ export default function Header(){
                 .error((err)=>{
                     console.error("Failed to fetch user header data:", err);
                 })
+                .boundaryNormalize()
                 .toJson()
                 return res.data;
             },
