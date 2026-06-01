@@ -3,6 +3,7 @@ import { NavFloatButton } from "../common/NavFloatButton";
 import useRenderingTimer from "~/hooks/dev/useRenderingTimer";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Header from "../common/Header";
 
 
 
@@ -16,6 +17,7 @@ export default function DashboardLayout(){
 
     return(
         <QueryClientProvider client ={queryClient}>
+            <Header/>
             <Outlet context={floatState}/>
             <NavFloatButton 
                 onFetchClick={(e)=>{ 
