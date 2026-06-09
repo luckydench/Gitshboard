@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { dench, HTTPCredentials } from "dench-fetch";
 import { useMemo, useState } from "react"
 import EmptyState from "~/components/page/stat/EmptyState";
+import OverviewSection from "~/components/page/stat/OverviewSection";
 import SectionHeading from "~/components/page/stat/SectionHeading";
+import StatTitleSection from "~/components/page/stat/StatTitleSection";
+import TechnologyDistribution from "~/components/page/stat/TechnologyDistribution";
 import type { CommonResponse } from "~/types/common/common";
 import type { DevelopStatsNode, GithubCommitTimeRepositoryNode, GithubLanguageRepositoryNode, GithubProjectTopicsNode, GithubRepoCommonResponse, ProjectLiveRateNode } from "~/types/page/statpage";
 import {
@@ -78,53 +81,12 @@ export default function StatPage(){
     return(
         <div className="min-h-screen bg-[#f4f6f1] text-gray-950 dark:bg-gray-950 dark:text-white">
             <main className="mx-auto flex max-w-360 flex-col gap-8 px-6 py-10 lg:px-8">
-                <section className={`${surfaceClass} overflow-hidden p-8 md:p-10`}>
-                    <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-                        <div className="max-w-2xl">
-                            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-gray-400">Account analytics</p>
-                            <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">Development statistics</h1>
-                            <p className="mt-5 max-w-xl text-base leading-7 text-gray-500 dark:text-gray-400">
-                                Repository activity, technology usage, and project health in one workspace.
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-3 rounded-3xl bg-[#eef4ff] px-5 py-4 shadow-inner dark:bg-gray-800">
-                            <span className={`h-2.5 w-2.5 rounded-full ${isLoading ? "animate-pulse bg-amber-400" : isError ? "bg-rose-500" : "bg-emerald-500"}`} />
-                            <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gray-400">Data sources</p>
-                                <p className="mt-1 text-sm font-semibold">{isLoading ? "Syncing APIs" : isError ? "Sync failed" : "5 sources ready"}</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                <StatTitleSection title="Development statistics" isLoading={isLoading} isError={isError} />
 
-                <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-                    {overviewStats.map((stat) => (
-                        <article key={stat.label} className={`${surfaceClass} p-6`}>
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">{stat.label}</p>
-                            <p className="mt-5 truncate text-3xl font-semibold tracking-tight">{isLoading ? "-" : stat.value}</p>
-                            <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">{stat.caption}</p>
-                        </article>
-                    ))}
-                </section>
+                <OverviewSection analytics={analytics} isLoading={isLoading} />
 
                 <section className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
-                    <article className={`${surfaceClass} p-7 md:p-8`}>
-                        <SectionHeading eyebrow="Languages" title="Technology distribution" detail="Code volume across repositories" />
-                        <div className="mt-8 space-y-6">
-                            {analytics.languages.map((language) => (
-                                <div key={language.name}>
-                                    <div className="mb-2 flex items-center justify-between text-sm">
-                                        <span className="font-medium">{language.name}</span>
-                                        <span className="text-gray-400">{language.percent}%</span>
-                                    </div>
-                                    <div className="h-2.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
-                                        <div className={`h-full rounded-full ${language.color}`} style={{ width: `${language.percent}%` }} />
-                                    </div>
-                                </div>
-                            ))}
-                            {!isLoading && analytics.languages.length === 0 && <EmptyState text="No language data available" />}
-                        </div>
-                    </article>
+                    <TechnologyDistribution languages={analytics.languages} isLoading={isLoading} />
 
                     <article className={`${surfaceClass} p-7 md:p-8`}>
                         <SectionHeading eyebrow="Commit rhythm" title="Weekly activity" detail="Default branch commit frequency" />

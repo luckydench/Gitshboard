@@ -177,6 +177,9 @@ export function calculateCommitStats(response?: GithubRepoCommonResponse<GithubC
     };
 }
 
+
+
+
 function findProjectCategory(values: string[]) {
     const normalized = values.map((value) => value.toLowerCase());
 
