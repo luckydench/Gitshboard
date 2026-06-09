@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { dench, HTTPCredentials } from "dench-fetch";
 import { useMemo, useState } from "react"
+import SectionHeading from "~/components/page/stat/SectionHeading";
 import type { CommonResponse } from "~/types/common/common";
 import type { DevelopStatsNode, GithubCommitTimeRepositoryNode, GithubLanguageRepositoryNode, GithubProjectTopicsNode, GithubRepoCommonResponse, ProjectLiveRateNode } from "~/types/page/statpage";
 import {
@@ -254,12 +255,3 @@ function EmptyState({ text }: { text: string }){
     return <p className="rounded-3xl bg-gray-100 p-5 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400">{text}</p>
 }
 
-function SectionHeading({ eyebrow, title, detail }: { eyebrow: string, title: string, detail: string }){
-    return(
-        <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gray-400">{eyebrow}</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h2>
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{detail}</p>
-        </div>
-    )
-}
