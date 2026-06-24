@@ -7,14 +7,11 @@ import { useMemo, useState } from "react";
 import { dench, HTTPCredentials } from "dench-fetch";
 import type { GithubRepoCommonResponse, ProjectLiveRateNode } from "~/types/page/statpage";
 import type { CommonResponse } from "~/types/common/common";
+import React from "react";
 
 
+export default React.memo(RepositoryActivitySection);
 
-export interface RepositoryActivitySectionProps{
-    health : ReturnType<typeof calculateProjectHealth>,
-    isLoading : boolean;
-
-}
 
 function getStatusClass(status: ProjectStatus){
     if(status === "Active") return "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300";
@@ -38,9 +35,10 @@ function Skeleton(){
 }
 
 
-export default function RepositoryActivitySection(){
+function RepositoryActivitySection(){
 
         const [denchInstance] = useState(()=>dench("http://localhost:3000/api", "repositoryActivitySectionDench"));
+        
         const {data, isLoading, isError} = useQuery({
             queryKey : ["repositoryActivitySection"],
             queryFn : async()=>{
@@ -56,7 +54,6 @@ export default function RepositoryActivitySection(){
 
 
         if(isLoading){
-
             const skeletons  : ReturnType<typeof Skeleton>[] = [];
             for(let i=0; i<8; ++i){
                 skeletons.push(<Skeleton key={i} />)
@@ -67,9 +64,9 @@ export default function RepositoryActivitySection(){
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                     <SectionHeading eyebrow="Project health" title="Repository activity" detail="Recency, archive state, and ownership" />
                     <div className="flex gap-5 text-sm text-gray-500 dark:text-gray-400">
-                        <span><strong className="text-gray-950 dark:text-white">{health.active}</strong> active</span>
-                        <span><strong className="text-gray-950 dark:text-white">{health.dormant}</strong> dormant</span>
-                        <span><strong className="text-gray-950 dark:text-white">{health.archived}</strong> archived</span>
+                        <span> active</span>
+                        <span> dormant</span>
+                        <span> archived</span>
                     </div>
                 </div>
                 <div className="mt-8 grid gap-3">
@@ -78,7 +75,6 @@ export default function RepositoryActivitySection(){
             </section>
             )
         }
-
 
         return(
         <section className={`${surfaceClass} p-7 md:p-8`}>

@@ -2,19 +2,18 @@ import { surfaceClass } from "~/routes/statpage";
 import SectionHeading from "./SectionHeading";
 import { calculateDeveloperProfile } from "~/utils/statpage";
 import EmptyState from "./EmptyState";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { dench, HTTPCredentials } from "dench-fetch";
 import type { CommonResponse } from "~/types/common/common";
 import { useQuery } from "@tanstack/react-query";
 import type { DevelopStatsNode, GithubRepoCommonResponse } from "~/types/page/statpage";
-
-export interface WorkingStyleArticleProps{
-    developer : ReturnType<typeof calculateDeveloperProfile>,
-    isLoading : boolean;
-}
+import React from "react";
 
 
-function Skeleton(){
+export default React.memo(WorkingStyleArticle);
+
+
+function ListSkeleton(){
     return(
         <div>
             <div className="mb-2 flex items-center justify-between text-sm">
@@ -28,20 +27,17 @@ function Skeleton(){
 }
 
 
-
-function Skeleton2(){
+function BottomSkeleton(){
     return(
-        <div className="rounded-3xl bg-gray-100 p-4 dark:bg-gray-800 animate-pulse">
-
-        </div>
+        <div className="rounded-3xl bg-gray-100 p-4 dark:bg-gray-800 animate-pulse"></div>
     )
 }
 
 
-
-export default function WorkingStyleArticle(){
+function WorkingStyleArticle(){
     
     const denchInstance = useState(() => dench("http://localhost:3000/api", "workingStyleArticleDench"))[0];
+    const count = useRef(0);
 
     const [percents, setPercents] = useState<number[]>([]);
 
@@ -58,6 +54,7 @@ export default function WorkingStyleArticle(){
 
     const developer = useMemo(()=> calculateDeveloperProfile(data!), [data]);
 
+
     useEffect(()=>{
         if(!isLoading){
             const arr = developer.profiles.map((profile)=>{
@@ -70,14 +67,13 @@ export default function WorkingStyleArticle(){
 
 
     if(isLoading){
-
-        const skeletons : ReturnType<typeof Skeleton>[] = [];
+        const skeletons : ReturnType<typeof ListSkeleton>[] = [];
         for(let i=0; i<5; ++i){
-            skeletons.push(<Skeleton key={i}/>)
+            skeletons.push(<ListSkeleton key={i}/>)
         }
-        const skeletons2 : ReturnType<typeof Skeleton2>[] = [];
+        const bottomSkeletons : ReturnType<typeof BottomSkeleton>[] = [];
         for(let i=0; i<2; ++i){
-            skeletons2.push(<Skeleton2 key={i}/>)
+            bottomSkeletons.push(<BottomSkeleton key={i}/>)
         }
 
         return(
@@ -87,12 +83,13 @@ export default function WorkingStyleArticle(){
                         {skeletons}
                     </div>
                     <div className="mt-8 h-32 grid gap-3 sm:grid-cols-2">
-                        {skeletons2}
+                        {bottomSkeletons}
                     </div>
             </article>
         )
     }
 
+    console.log("렌더링 ", count.current++);
 
     return(
             <article className={`${surfaceClass} p-7 md:p-8`}>
@@ -105,7 +102,7 @@ export default function WorkingStyleArticle(){
                                 <span className="text-gray-400">{profile.percent}%</span>
                             </div>
                             <div className="h-2 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-800">
-                                <div className="h-full rounded-full bg-gray-950 dark:bg-white" style={{ width: `${percents[idx]}%` }} />
+                                <div className="h-full rounded-full bg-gray-950 dark:bg-white w-0 transition-all duration-300" style={{ width: `${percents[idx]}%` }} />
                             </div>
                         </div>
                     ))}
@@ -121,6 +118,4 @@ export default function WorkingStyleArticle(){
                 {!isLoading && developer.profiles.length === 0 && <EmptyState text="No developer profile data available" />}
             </article>
     )
-
-
 }

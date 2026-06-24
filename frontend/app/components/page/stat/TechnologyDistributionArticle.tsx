@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 import type { calculateLanguageStats } from "~/utils/statpage";
 import EmptyState from "./EmptyState";
 import { useEffect, useRef, useState } from "react";
-
+import React from "react";
 
 export interface TechnologyDistributionProps{
     languages : ReturnType<typeof calculateLanguageStats>,
@@ -38,11 +38,9 @@ export default function TechnologyDistributionArticle({ languages, isLoading }: 
             const maps = languages.map((language)=>language.percent ?? 0);
             setPercents(maps);
         }
-    },[isLoading]);
+    },[isLoading, languages]);
 
 
-    
-    console.log("렌더링 몇번 될까요 ", count.current++);
 
 
     if(isLoading){
