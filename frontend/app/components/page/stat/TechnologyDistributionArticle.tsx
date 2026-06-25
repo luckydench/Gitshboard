@@ -1,15 +1,13 @@
 import { surfaceClass } from "~/routes/statpage";
 import SectionHeading from "./SectionHeading";
-import type { calculateLanguageStats } from "~/utils/statpage";
+import { calculateLanguageStats } from "~/utils/statpage";
 import EmptyState from "./EmptyState";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import React from "react";
-
-export interface TechnologyDistributionProps{
-    languages : ReturnType<typeof calculateLanguageStats>,
-    isLoading : boolean;
-
-}
+import { dench, HTTPCredentials } from "dench-fetch";
+import { useQuery } from "@tanstack/react-query";
+import type { CommonResponse } from "~/types/common/common";
+import type { GithubLanguageRepositoryNode, GithubRepoCommonResponse } from "~/types/page/statpage";
 
 
 function LoadingSkelton(){
@@ -27,11 +25,26 @@ function LoadingSkelton(){
 }
 
 
-export default function TechnologyDistributionArticle({ languages, isLoading }: TechnologyDistributionProps){
+export default function TechnologyDistributionArticle(){
 
     const [percents, setPercents] = useState<number[]>([]);
 
-    const count = useRef(0);
+    const[denchInstance] = useState(()=>dench("http://localhost:3000/api", "technologyDistributionArticleDench"));
+    
+    const { data, isLoading, isError} = useQuery({
+        queryKey : ["technologyDistributionArticleData"],
+        queryFn : async()=>{
+            type CommonResponseType<T> = CommonResponse<GithubRepoCommonResponse<T>>
+            const res = await denchInstance.get<CommonResponseType<GithubLanguageRepositoryNode>>("repos/languages")
+                            .credentials(HTTPCredentials.INCLUDE)
+                            .toJson();
+            return res.data;
+        },
+        staleTime : 5 * 60 * 1000,
+        gcTime : 10 * 60 * 1000,
+    })
+
+    const languages = useMemo(() => calculateLanguageStats(data!), [data]);
 
     useEffect(()=>{
         if(!isLoading){
@@ -39,7 +52,6 @@ export default function TechnologyDistributionArticle({ languages, isLoading }: 
             setPercents(maps);
         }
     },[isLoading, languages]);
-
 
 
 
