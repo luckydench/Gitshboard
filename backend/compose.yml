@@ -1,0 +1,24 @@
+services:
+  prod-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prod-backend-image
+    ports:
+      - "3000:3000"
+    
+  dev-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: dev-backend-image
+    ports:
+      - "3000:3000"
+    env_file: 
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /src
+    
