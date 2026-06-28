@@ -10,7 +10,7 @@ export default function useAuthCheck(){
       useEffect(()=>{
         const checkLogin = async ()=>{
           try{
-             const res = await fetch('http://localhost:3000/api/auth/check',{
+             const res = await fetch('https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app/api/auth/check',{
                 method : 'GET',
                 credentials : 'include'
              })

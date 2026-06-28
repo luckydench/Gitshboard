@@ -70,15 +70,15 @@ export default function Home() {
             <button
               type="button"
               aria-label="Login with GitHub"
-              className="flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-[0_22px_60px_rgba(15,23,42,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_26px_72px_rgba(15,23,42,0.2)] dark:bg-white"
+              className="flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-[0_22px_60px_rgba(15,23,42,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_26px_72px_rgba(15,23,42,0.2)] dark:bg-white"
               onClick={()=>{
                 handleOAuthLogin(ID, URL);
               }}
             >
-              <Github width={64} height={64} />
+              <Github width={84} height={84} />
             </button>
           ): 
-            <div className="h-16 w-16 rounded-full bg-white/80 p-6 shadow-[0_22px_60px_rgba(15,23,42,0.10)] dark:bg-white/10">
+            <div className="h-32 w-32 rounded-full bg-white/80 p-6 shadow-[0_22px_60px_rgba(15,23,42,0.10)] dark:bg-white/10">
               <span className="block h-full w-full animate-pulse rounded-full bg-github-light" />
             </div>
           }

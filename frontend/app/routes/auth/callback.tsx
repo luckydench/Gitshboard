@@ -24,9 +24,14 @@ export default function Callback() {
             }
 
             try{
+                const local_url = "http://localhost:3000";
+                const prod_url  = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app";
+                const backend_url = prod_url; // 개발 환경에서는 local_url 사용
+
+                console.log("Using backend URL:", backend_url);
                 // 백엔드에 인증 코드 보내서 서버 액세스 토큰 받아오기
                 // 참고로 http:// 로 //를 다 써줘야 절대 경로로 인식됨
-                const response = await fetch('http://localhost:3000/api/auth/github', {
+                const response = await fetch(`${backend_url}/api/auth/github`, {
                     method : 'POST',
                     headers : {
                         'Content-Type' : 'application/json'

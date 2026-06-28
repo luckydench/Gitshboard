@@ -14,7 +14,11 @@ interface UserDataState{
 
 export default function Header(){
 
-    const denchInstance = useRef(dench("http://localhost:3000/api//", "headerDench"));
+    const localurl = "http://localhost:3000";
+    const produrl  = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app";
+    const backendurl = produrl; // 배포 환경에서는 produrl 사용
+
+    const denchInstance = useRef(dench(`${backendurl}/api/`, "headerDench"));
 
     const { data, error, isLoading, isError} = useQuery<UserDataState, Error>(
         {
