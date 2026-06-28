@@ -3,4 +3,4 @@ dist
 node_modules
 README.md
 .git
-.env
+.env.*
