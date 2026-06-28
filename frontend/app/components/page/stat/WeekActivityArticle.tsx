@@ -24,7 +24,8 @@ function Skeleton(){
 
 export default function WeekActivityArticle(){
     
-    const [denchInstance] = useState(()=>dench("http://localhost:3000/api", "weekActivityArticleDench"));
+    const backendurl = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app"; // 배포 환경에서는 produrl 사용
+    const [denchInstance] = useState(()=>dench(`${backendurl}/api`, "weekActivityArticleDench"));
 
     const [percents, setPercents] = useState<number[]>([]);
 

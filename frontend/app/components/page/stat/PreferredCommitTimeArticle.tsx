@@ -6,7 +6,9 @@ import { dench, HTTPCredentials } from "dench-fetch";
 import { useQuery } from "@tanstack/react-query";
 import type { CommonResponse } from "~/types/common/common";
 import type { GithubCommitTimeRepositoryNode, GithubRepoCommonResponse } from "~/types/page/statpage";
+import React from "react";
 
+export default React.memo(PreferredCommitTimeArticle);
 
 
 function Skeleton(){
@@ -17,9 +19,10 @@ function Skeleton(){
 
 
 
-export default function PreferredCommitTimeArticle(){
+function PreferredCommitTimeArticle(){
 
-    const [denchInstance] = useState(()=>dench("http://localhost:3000/api", "preferredCommitTimeArticleDench"));
+    const backendurl = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app"; // 배포 환경에서는 produrl 사용
+    const [denchInstance] = useState(()=>dench(`${backendurl}/api`, "preferredCommitTimeArticleDench"));
     const [percents, setPercents] = useState<number[]>([]);
 
     const { data, isLoading, isError } = useQuery({

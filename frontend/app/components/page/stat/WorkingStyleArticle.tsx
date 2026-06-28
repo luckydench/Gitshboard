@@ -36,7 +36,9 @@ function BottomSkeleton(){
 
 function WorkingStyleArticle(){
     
-    const denchInstance = useState(() => dench("http://localhost:3000/api", "workingStyleArticleDench"))[0];
+    const backendurl = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app"; // 배포 환경에서는 produrl 사용
+
+    const denchInstance = useState(() => dench(`${backendurl}/api`, "workingStyleArticleDench"))[0];
     const count = useRef(0);
 
     const [percents, setPercents] = useState<number[]>([]);
@@ -68,13 +70,11 @@ function WorkingStyleArticle(){
 
     if(isLoading){
         const skeletons : ReturnType<typeof ListSkeleton>[] = [];
-        for(let i=0; i<5; ++i){
-            skeletons.push(<ListSkeleton key={i}/>)
-        }
+        for(let i=0; i<5; ++i) skeletons.push(<ListSkeleton key={i}/>)
+        
         const bottomSkeletons : ReturnType<typeof BottomSkeleton>[] = [];
-        for(let i=0; i<2; ++i){
-            bottomSkeletons.push(<BottomSkeleton key={i}/>)
-        }
+        for(let i=0; i<2; ++i)  bottomSkeletons.push(<BottomSkeleton key={i}/>)
+        
 
         return(
             <article className={`${surfaceClass} p-7 md:p-8`}>

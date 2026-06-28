@@ -24,7 +24,8 @@ export const surfaceClass = "rounded-[1.75rem] bg-white shadow-[0_22px_65px_rgba
 
 export default function StatPage(){
 
-    const denchInstance = useState(()=>dench("http://localhost:3000/api", "statPageDench"))[0];
+    const backendurl = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app"; // 배포 환경에서는 produrl 사용
+    const denchInstance = useState(()=>dench(`${backendurl}/api`, "statPageDench"))[0];
 
     const { data, isLoading, isError } = useQuery({
         queryKey : ["statPageData"],

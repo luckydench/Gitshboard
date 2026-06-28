@@ -36,7 +36,7 @@ export default function useFetchAll<T extends any[]>( config? : RequestInit, sta
         const fetchData = async()=>{
             try{
                 const req = api_url.map(async(url)=>{
-                    const res = await fetch(`http://localhost:3000/${url}`,
+                    const res = await fetch(`https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app/${url}`,
                         config ? config : {}
                     )   
                     

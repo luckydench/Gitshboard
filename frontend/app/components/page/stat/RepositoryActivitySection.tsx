@@ -37,7 +37,8 @@ function Skeleton(){
 
 function RepositoryActivitySection(){
 
-        const [denchInstance] = useState(()=>dench("http://localhost:3000/api", "repositoryActivitySectionDench"));
+        const backendurl = "https://port-0-gitshboard-mqw7zlvy6c191acf.sel3.cloudtype.app"; // 배포 환경에서는 produrl 사용
+        const [denchInstance] = useState(()=>dench(`${backendurl}/api`, "repositoryActivitySectionDench"));
         
         const {data, isLoading, isError} = useQuery({
             queryKey : ["repositoryActivitySection"],
