@@ -63,7 +63,7 @@ export default function Home() {
         
         <section className="relative flex w-full max-w-sm flex-col items-center gap-7 text-center">
           <h1 className="text-4xl font-semibold tracking-tight text-gray-950 dark:text-white sm:text-5xl">
-            GitHub Dashboard
+            Gitshboard
           </h1>
 
           {loginCheckState === false || loginCheckState === null ? (
@@ -83,13 +83,6 @@ export default function Home() {
             </div>
           }
         </section>
-
-
-
-
-
-        <MovingStrip/>
-
       </main>
 
   );
