@@ -7,6 +7,7 @@
 
 <br />
 
+
 <img src="https://img.shields.io/badge/React-19.2-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React" />
 <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
 <img src="https://img.shields.io/badge/React_Router-7.13-CA4245?style=flat-square&logo=reactrouter&logoColor=white" alt="React Router" />
@@ -24,9 +25,9 @@
 </div>
 
 
-
-
 ## 개요
+
+[Gitshboard](https://gitshboard.vercel.app/)
 
 `Gitshboard`는 GitHub 계정과 연동하여 프로필, 저장소, 커밋 이력 등의 데이터를 시각적으로 정리하는 웹 애플리케이션입니다. 
 
@@ -87,3 +88,8 @@ flowchart LR
 - **Deployment**: 프런트엔드는 Vercel, 백엔드는 Docker 이미지 기반 Cloudtype 배포 구성을 사용합니다.
 
 
+## 실 서비스
+
+![alt text](/readme_img/image.png)
+
+![alt text](/readme_img/image-1.png)
