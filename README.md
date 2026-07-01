@@ -24,10 +24,10 @@
 
 </div>
 
+### [demo](https://gitshboard.vercel.app/)
+
 
 ## 개요
-
-[Gitshboard](https://gitshboard.vercel.app/)
 
 `Gitshboard`는 GitHub 계정과 연동하여 프로필, 저장소, 커밋 이력 등의 데이터를 시각적으로 정리하는 웹 애플리케이션입니다. 
 
