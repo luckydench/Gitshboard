@@ -89,15 +89,19 @@ export default function Header(){
                 <div className="flex items-center gap-3 hover:cursor-pointer" onClick={()=>{
                     navigate("/dashboard")
                 }}>
-                    <div className="rounded-2xl bg-gray-950 p-2 shadow-lg shadow-gray-950/15 dark:bg-white">
+                    <div className="rounded-xl bg-gray-950 p-1 shadow-lg shadow-gray-950/15 dark:bg-white">
                         <div className="invert dark:invert-0">
-                            <Github width={28} height={28} />
+                            <Github width={32} height={32} />
                         </div>
                     </div>
-                    <span className="text-sm font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">Gitshboard</span>
+                    <span className="text-2xl font-bold  text-gray-500 dark:text-gray-400">
+                        <span>Git</span>
+                        <span className="text-github-light">sh</span>
+                        <span>board</span>
+                    </span>
                 </div>
 
-                <div className="flex flex-row gap-6 text- font-medium tracking-[0.12em] text-gray-800 dark:text-gray-200">
+                <div className="flex flex-row gap-6 text-xl font-medium tracking-[0.12em] text-gray-800 dark:text-gray-200">
                     {menus}
                 </div>
 
